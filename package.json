@@ -25,6 +25,7 @@
     "not ie <= 8"
   ],
   "vue": {
-    "outputDir": "./docs"
+    "outputDir": "./docs",
+    "baseUrl": "./"
   }
 }
