@@ -1,19 +1,29 @@
 <template>
   <form @submit.prevent="addItem">
-    <input v-model.trim="newItem" placeholder="What needs to be done?">
+    <input @input="emitValue" v-model.trim="newItem" placeholder="What needs to be done?">
   </form>
 </template>
 
 <script>
   export default {
     name: 'TodoForm',
+    props: ['value'],
     data: () => ({
       newItem: '',
     }),
+    watch: {
+      value(value) {
+        this.newItem = value
+      }
+    },
     methods: {
       addItem() {
-        this.$emit('newTodo', { title: this.newItem, done: false })
+        this.$emit('newTodo', { title: this.newItem, done: false, id: Math.random() })
         this.newItem = ''
+      },
+      emitValue() {
+        clearTimeout(this.timerId)
+        this.timerId = setTimeout(() => this.$emit('input', this.newItem), 100)
       }
     }
   }
@@ -36,5 +46,9 @@ form {
     border: 1px solid #000;
     outline: none;
     background: #ffffffc4;
+
+    &::placeholder {
+      color: #b5b5b5bf;
+    }
   }
 </style>

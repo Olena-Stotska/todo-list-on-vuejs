@@ -44,10 +44,6 @@ export default {
 .filters {
   font-family: 'Raleway', sans-serif;
   padding: 0;
-  position: absolute;
-  bottom: 0;
-  right: 0;
-  left: 0;
   display: flex;
   justify-content: center;
   list-style-type: none;
@@ -57,18 +53,21 @@ ul {
   list-style: none;
   display: flex;
   justify-content: center;
-
+  margin: 0;
 }
 
 li {
   margin: 0 15px;
   cursor: pointer;
   padding: 2px 10px;
+  color: #009688;
+  font-size: 1.52rem;
 }
 
 .active {
   font-weight: bold;
   text-shadow: 1px 4px 4px rgba(0, 0, 0, 0.4);
   transition: all 0.5s;
+  border-bottom: 1px solid #9E9E9E;
 }
 </style>

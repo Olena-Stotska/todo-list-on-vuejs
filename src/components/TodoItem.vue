@@ -1,16 +1,35 @@
 <template>
   <div class="new-todo" :class="{ 'done-todo': item.done }">
-    <input v-model="item.done" type="checkbox" class="checkbox" :class="{ done: item.done }" />
-    {{ item.title }}
+    <input v-model="item.done" type="checkbox" class="checkbox"/>
+    <label v-if="!inEditMode" @dblclick="edit">{{ item.title }}</label>
+    <input v-focus class="edit" v-if="inEditMode" v-model="item.title" @keyup.enter="save"/>
     <button @click="$emit('deleteTodo', item)">x</button>
   </div>
 </template>
 
 <script>
-  export default {
-    name: "TodoItem",
-    props: ['item']
+export default {
+  name: "TodoItem",
+  props: ['item'],
+  data: () => ({
+    inEditMode: false
+  }),
+  methods: {
+    edit() {
+      this.inEditMode = true
+    },
+    save() {
+      this.inEditMode = false
+    }
+  },
+  directives: {
+    focus: {
+      inserted(el, binding) {
+        el.focus()
+      }
+    }
   }
+}
 </script>
 
 <style scoped lang="scss">
@@ -19,16 +38,27 @@
 .new-todo {
   font-family: 'Raleway', sans-serif;
   width: 50%;
-  font-size: 2.5rem;
+  font-size: 2rem;
   box-shadow: 0px 2px 10px rgba(0,0,0,0.2);
   margin: 20px auto;
-  padding: 0 10px;
+  padding: 5px 10px;
   display: flex;
   justify-content: space-between;
   align-items: center;
   background-color: #ffffffcf;
   border-radius: 8px;
-  transition: all 1s;
+  transition: all 0.5s;
+}
+
+.edit {
+  font-size: 2rem;
+  padding: 0 10px;
+  background-color: #ffffffcf;
+  outline: none;
+  border: 1px solid #009688;
+  border-radius: 4px;
+  text-align: center;
+  color: #2c3e50;
 }
 
 .done-todo {
@@ -79,7 +109,7 @@ button {
   border-radius: 50%;
   outline: none;
   cursor: pointer;
-  transition: background-color 1s;
+  transition: background-color 0.5s;
 
   &:hover {
     background-color: #e31000;
