@@ -2,7 +2,7 @@
   <div id="app">
     <TodoForm @newTodo="addTodo" v-model="search" />
     <TodoFilter @filter="setFilter" />
-    <transition-group :name="animation">
+    <transition-group name="list">
       <TodoItem @deleteTodo="deleteTodo" :key="item.id" :item="item" v-for="item in filteredItems"/>
     </transition-group>
   </div>
@@ -24,7 +24,6 @@ export default {
   data: () => ({
     items: JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]'),
     currentFilter: items => items,
-    animation: '',
     search: '',
   }),
   computed: {
@@ -40,21 +39,18 @@ export default {
     }
   },
   watch: {
-    filteredItems(newItems, oldItems) {
-      this.animation = newItems.length >= oldItems.length ? 'add' : 'remove'
-    },
     items: {
+      deep: true,
       handler() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify(this.items))
-      },
-      deep: true
+      }
     }
   },
   methods: {
     addTodo(todo) {
       this.search = ''
       this.$nextTick(() => {
-        this.items.push(todo)
+        this.items.unshift(todo)
       })
     },
     deleteTodo(todo) {
@@ -72,24 +68,14 @@ export default {
 @import url('https://fonts.googleapis.com/css?family=Galada');
 @import './animation/animation.scss';
 
-.remove-enter,
-.remove-leave-to {
+.list-enter,
+.list-enter-to {
   animation: fadeInLeft 0.6s;
 }
 
-.remove-enter-active,
-.remove-leave-active {
+.list-leave,
+.list-leave-to {
   animation: fadeOutLeft 0.6s;
-}
-
-.add-enter,
-.add-leave-to {
-  animation: fadeOutLeft 0.6s;
-}
-
-.add-enter-active,
-.add-leave-active {
-  animation: fadeInLeft 0.6s;
 }
 
 #app {
